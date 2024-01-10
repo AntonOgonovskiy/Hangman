@@ -1,0 +1,64 @@
+.bodyWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: row;
+}
+
+.keyboardBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.gallows {
+  width: 40%;
+  position: relative;
+}
+
+.gallowMan {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 200px;
+  left: 235px;
+}
+.gallowMan .gallowBody {
+  max-width: 10px;
+  max-height: 100px;
+}
+
+.gallowPart {
+  max-width: 80px;
+  max-height: 80px;
+}
+
+.quiz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  width: 60%;
+}
+
+/*# sourceMappingURL=style.css.map */

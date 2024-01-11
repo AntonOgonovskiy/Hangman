@@ -17,15 +17,32 @@
   align-items: center;
   justify-content: center;
   padding: 5px;
+  width: 20px;
   cursor: pointer;
   border: 1px solid black;
   border-radius: 5px;
   margin: 5px;
 }
+.keyboardBtn:hover {
+  box-shadow: 2px 2px 2px gray;
+}
 
 .gallows {
   width: 40%;
   position: relative;
+}
+
+.unvise {
+  opacity: 0;
+}
+
+.inactive {
+  border-color: lightgray;
+  color: lightgrey;
+}
+.inactive:hover {
+  box-shadow: none;
+  cursor: default;
 }
 
 .gallowMan {

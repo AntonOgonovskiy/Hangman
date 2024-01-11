@@ -91,6 +91,7 @@ createLayout();
 
 function createLayout() {
   const quizQuestion = quizQuestions[selectQuestion()];
+  console.log(quizQuestion);
   const bodyWrapper = document.createElement("div");
   const gallows = document.createElement("div");
   gallows.classList.add("gallows");
@@ -103,14 +104,14 @@ function createLayout() {
   const quiz = document.createElement("div");
   quiz.classList.add("quiz");
   const secretWord = document.createElement("p");
-  secretWord.innerText = Array(quizQuestion.answer.length).fill("_").join(" ");
+  secretWord.classList.add("secretWord");
+  secretWord.innerText = Array(quizQuestion.answer.length).fill("__").join(" ");
   const question = document.createElement("p");
   const innerHint = `Hint: ${quizQuestion.question}`;
   question.innerText = innerHint;
   const counter = document.createElement("p");
-  const incorrectAnswers = 0;
-  const answerLength = quizQuestion.answer.length;
-  const innerIncorrAnsw = `Incorrect guesses: ${incorrectAnswers} / ${answerLength}`;
+  counter.setAttribute("id", "counter");
+  const innerIncorrAnsw = "Incorrect guesses: 0 / 6";
   counter.innerText = innerIncorrAnsw;
   const keyboard = createKeyboard();
   keyboard.classList.add("keyboard");
@@ -123,6 +124,7 @@ function createLayout() {
   bodyWrapper.append(gallows);
   bodyWrapper.append(quiz);
   body.append(bodyWrapper);
+  localStorage.setItem("id", quizQuestion.id);
 }
 
 function createGallower() {
@@ -133,27 +135,39 @@ function createGallower() {
   const gallowHead = document.createElement("img");
   gallowHead.setAttribute("src", "../files/head.png");
   gallowHead.setAttribute("alt", "head");
+  gallowHead.setAttribute("id", "body_0");
   gallowHead.classList.add("gallowPart");
+  gallowHead.classList.add("unvise");
   const gallowBody = document.createElement("img");
   gallowBody.setAttribute("src", "../files/body.png");
   gallowBody.setAttribute("alt", "body");
+  gallowBody.setAttribute("id", "body_1");
   gallowBody.classList.add("gallowBody");
+  gallowBody.classList.add("unvise");
   const gallowLeftHand = document.createElement("img");
   gallowLeftHand.setAttribute("src", "../files/hand-one.png");
   gallowLeftHand.setAttribute("alt", "hand");
+  gallowLeftHand.setAttribute("id", "body_2");
   gallowLeftHand.classList.add("gallowPart");
+  gallowLeftHand.classList.add("unvise");
   const gallowRightHand = document.createElement("img");
   gallowRightHand.setAttribute("src", "../files/hand-two.png");
   gallowRightHand.setAttribute("alt", "hand");
+  gallowRightHand.setAttribute("id", "body_3");
   gallowRightHand.classList.add("gallowPart");
+  gallowRightHand.classList.add("unvise");
   const gallowLeftLeg = document.createElement("img");
   gallowLeftLeg.setAttribute("src", "../files/leg-one.png");
   gallowLeftLeg.setAttribute("alt", "leg");
+  gallowLeftLeg.setAttribute("id", "body_4");
   gallowLeftLeg.classList.add("gallowPart");
+  gallowLeftLeg.classList.add("unvise");
   const gallowRightLeg = document.createElement("img");
   gallowRightLeg.setAttribute("src", "../files/leg-two.png");
   gallowRightLeg.setAttribute("alt", "leg");
+  gallowRightLeg.setAttribute("id", "body_5");
   gallowRightLeg.classList.add("gallowPart");
+  gallowRightLeg.classList.add("unvise");
   gallowTop.append(gallowHead);
   gallowCenter.append(gallowLeftHand);
   gallowCenter.append(gallowBody);
@@ -167,14 +181,19 @@ function createGallower() {
 }
 
 function getRandomNumber() {
-  return Math.floor(Math.random() * 11);
+  return Math.floor(Math.random() * 10);
 }
 
 function selectQuestion() {
-  const prevNum = localStorage.getItem("id");
-  const currNum = getRandomNumber();
-  if (currNum === prevNum) {
-    selectQuestion();
+  const prevNum = +localStorage.getItem("id");
+  let currNum = 0;
+  again: for (let i = 0; i < 1; ) {
+    currNum = getRandomNumber();
+    if (currNum === prevNum) {
+      continue again;
+    } else {
+      i++;
+    }
   }
   return currNum;
 }
@@ -194,3 +213,43 @@ function createKeyboard() {
   });
   return keyboard;
 }
+
+function getQuizData() {
+  const quizQuestion = quizQuestions[localStorage.getItem("id")];
+  return quizQuestion;
+}
+
+function vrBtnClick(e) {
+  const btn = e.target.closest("p");
+  if (btn.classList.contains("inactive")) return false;
+  const char = btn.innerText;
+  const quizQuestion = getQuizData();
+  let word = secretWord.innerText;
+  let counter = document.getElementById("counter");
+  if (char && quizQuestion.answer.includes(char)) {
+    word = word
+      .split(" ")
+      .map((item, index) => {
+        if (quizQuestion.answer[index] === char) {
+          return char;
+        } else {
+          return item;
+        }
+      })
+      .join(" ");
+    secretWord.innerText = word;
+  } else {
+    let number = +counter.innerText[19];
+    counterText = counter.innerText
+      .split(" ")
+      .toSpliced(2, 1, number + 1)
+      .join(" ");
+    counter.innerHTML = counterText;
+    let bodyPart = document.getElementById(`body_${number}`);
+    bodyPart.classList.remove("unvise");
+  }
+  btn.classList.add("inactive");
+}
+const secretWord = document.querySelector(".secretWord");
+const keyboard = document.querySelector(".keyboard");
+keyboard.addEventListener("click", vrBtnClick);

@@ -90,7 +90,6 @@ const body = document.querySelector("body");
 createLayout();
 
 function createLayout() {
-  const quizQuestion = quizQuestions[selectQuestion()];
   const bodyWrapper = document.createElement("div");
   const gallows = document.createElement("div");
   gallows.classList.add("gallows");
@@ -104,14 +103,10 @@ function createLayout() {
   quiz.classList.add("quiz");
   const secretWord = document.createElement("p");
   secretWord.classList.add("secretWord");
-  secretWord.innerText = Array(quizQuestion.answer.length).fill("__").join(" ");
   const question = document.createElement("p");
-  const innerHint = `Hint: ${quizQuestion.question}`;
-  question.innerText = innerHint;
+  question.setAttribute("id", "question");
   const counter = document.createElement("p");
   counter.setAttribute("id", "counter");
-  const innerIncorrAnsw = "Incorrect guesses: 0 / 6";
-  counter.innerText = innerIncorrAnsw;
   const keyboard = createKeyboard();
   keyboard.classList.add("keyboard");
   bodyWrapper.classList.add("bodyWrapper");
@@ -125,7 +120,7 @@ function createLayout() {
   bodyWrapper.append(quiz);
   body.append(bodyWrapper);
   body.append(popup);
-  localStorage.setItem("id", quizQuestion.id);
+  startGame();
 }
 
 function createGallower() {
@@ -308,6 +303,34 @@ function fillPopup(text, incorrectAnswers) {
   popupIncorrCounter.innerText = `You have ${incorrectAnswers} incorrect answers`;
 }
 
+function startGame() {
+  const popup = document.querySelector(".popup");
+  const quizQuestion = quizQuestions[selectQuestion()];
+  const secretWord = document.querySelector(".secretWord");
+  const innerHint = `Hint: ${quizQuestion.question}`;
+  const innerIncorrAnsw = "Incorrect guesses: 0 / 6";
+  const counter = document.getElementById("counter");
+  const question = document.getElementById("question");
+  if (popup.classList.contains("pop-visibility")) {
+    const popupContent = document.querySelector(".popup-content");
+    popup.classList.remove("pop-visibility");
+    popupContent.classList.remove("pop-open");
+    body.classList.remove("scroll");
+    const keyboardBtns = document.querySelectorAll(".keyboardBtn");
+    const gallowParts = document.querySelectorAll(".gallowPart");
+    const gallowBody = document.querySelector(".gallowBody");
+    gallowBody.classList.add("unvise");
+    keyboardBtns.forEach((item) => item.classList.remove("inactive"));
+    gallowParts.forEach((item) => item.classList.add("unvise"));
+  }
+  secretWord.innerText = Array(quizQuestion.answer.length).fill("__").join(" ");
+  counter.innerText = innerIncorrAnsw;
+  question.innerText = innerHint;
+  localStorage.setItem("id", quizQuestion.id);
+}
+
 const secretWord = document.querySelector(".secretWord");
+const restartBtn = document.querySelector(".menu-button-wrapper");
 const keyboard = document.querySelector(".keyboard");
 keyboard.addEventListener("click", vrBtnClick);
+restartBtn.addEventListener("click", startGame);

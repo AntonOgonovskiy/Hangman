@@ -91,7 +91,6 @@ createLayout();
 
 function createLayout() {
   const quizQuestion = quizQuestions[selectQuestion()];
-  console.log(quizQuestion);
   const bodyWrapper = document.createElement("div");
   const gallows = document.createElement("div");
   gallows.classList.add("gallows");
@@ -116,6 +115,7 @@ function createLayout() {
   const keyboard = createKeyboard();
   keyboard.classList.add("keyboard");
   bodyWrapper.classList.add("bodyWrapper");
+  const popup = createPopup();
   gallows.append(gallow);
   quiz.append(secretWord);
   quiz.append(question);
@@ -124,6 +124,7 @@ function createLayout() {
   bodyWrapper.append(gallows);
   bodyWrapper.append(quiz);
   body.append(bodyWrapper);
+  body.append(popup);
   localStorage.setItem("id", quizQuestion.id);
 }
 
@@ -221,8 +222,8 @@ function getQuizData() {
 
 function vrBtnClick(e) {
   const btn = e.target.closest("p");
-  if (btn.classList.contains("inactive")) return false;
-  const char = btn.innerText;
+  if (!btn || btn.classList.contains("inactive")) return false;
+  const char = btn?.innerText;
   const quizQuestion = getQuizData();
   let word = secretWord.innerText;
   let counter = document.getElementById("counter");
@@ -249,7 +250,64 @@ function vrBtnClick(e) {
     bodyPart.classList.remove("unvise");
   }
   btn.classList.add("inactive");
+  checkGame();
 }
+
+function checkGame() {
+  let word = secretWord.innerText;
+  const popup = document.querySelector(".popup");
+  const popupContent = document.querySelector(".popup-content");
+  let incorrectAnswers = document
+    .getElementById("counter")
+    .innerText.substring(18, 20);
+  if (+incorrectAnswers === 6) {
+    fillPopup("You loose", incorrectAnswers);
+    popup.classList.add("pop-visibility");
+    popupContent.classList.add("pop-open");
+    body.classList.add("scroll");
+  } else if (!word.includes("__")) {
+    fillPopup("You win!!!", incorrectAnswers);
+    popup.classList.add("pop-visibility");
+    popupContent.classList.add("pop-open");
+    body.classList.add("scroll");
+  }
+}
+
+function createPopup() {
+  const popup = document.createElement("div");
+  popup.classList.add("popup");
+  const popupBody = document.createElement("div");
+  popupBody.classList.add("popup-body");
+  const popupContent = document.createElement("div");
+  popupContent.classList.add("popup-content");
+  const popupHeader = document.createElement("p");
+  popupHeader.setAttribute("id", "popup_header");
+  const popupSecretWord = document.createElement("p");
+  popupSecretWord.setAttribute("id", "popup_secret_word");
+  const popupIncorrCounter = document.createElement("p");
+  popupIncorrCounter.setAttribute("id", "popup_incorrect_answers");
+  const restart = document.createElement("button");
+  restart.classList.add("menu-button-wrapper");
+  restart.innerText = "Try again";
+  popupContent.append(popupHeader);
+  popupContent.append(popupSecretWord);
+  popupContent.append(popupIncorrCounter);
+  popupContent.append(restart);
+  popupBody.append(popupContent);
+  popup.append(popupBody);
+  return popup;
+}
+
+function fillPopup(text, incorrectAnswers) {
+  const secretWord = getQuizData().answer;
+  const popupHeader = document.getElementById("popup_header");
+  const popupSecretWord = document.getElementById("popup_secret_word");
+  const popupIncorrCounter = document.getElementById("popup_incorrect_answers");
+  popupHeader.innerText = text;
+  popupSecretWord.innerText = `Your secret word was: ${secretWord}`;
+  popupIncorrCounter.innerText = `You have ${incorrectAnswers} incorrect answers`;
+}
+
 const secretWord = document.querySelector(".secretWord");
 const keyboard = document.querySelector(".keyboard");
 keyboard.addEventListener("click", vrBtnClick);

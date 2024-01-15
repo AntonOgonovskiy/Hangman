@@ -196,6 +196,7 @@ function selectQuestion() {
 
 function createKeyboardBtn(letter) {
   const btn = document.createElement("p");
+  btn.setAttribute("id", letter);
   btn.innerText = letter;
   btn.classList.add("keyboardBtn");
   return btn;
@@ -215,10 +216,19 @@ function getQuizData() {
   return quizQuestion;
 }
 
-function vrBtnClick(e) {
-  const btn = e.target.closest("p");
-  if (!btn || btn.classList.contains("inactive")) return false;
-  const char = btn?.innerText;
+function btnClick(e) {
+  let char = "";
+  if (e.type === "click") {
+    const btn = e.target.closest("p");
+    if (!btn || btn.classList.contains("inactive")) return false;
+    char = btn?.innerText;
+    btn.classList.add("inactive");
+  } else if (e.type === "keydown") {
+    char = String(e.key).toUpperCase();
+    const btn = document.getElementById(char);
+    if (btn.classList.contains("inactive")) return false;
+    btn.classList.add("inactive");
+  }
   const quizQuestion = getQuizData();
   let word = secretWord.innerText;
   let counter = document.getElementById("counter");
@@ -244,7 +254,6 @@ function vrBtnClick(e) {
     let bodyPart = document.getElementById(`body_${number}`);
     bodyPart.classList.remove("unvise");
   }
-  btn.classList.add("inactive");
   checkGame();
 }
 
@@ -256,7 +265,7 @@ function checkGame() {
     .getElementById("counter")
     .innerText.substring(18, 20);
   if (+incorrectAnswers === 6) {
-    fillPopup("You loose", incorrectAnswers);
+    fillPopup("You loose(((", incorrectAnswers);
     popup.classList.add("pop-visibility");
     popupContent.classList.add("pop-open");
     body.classList.add("scroll");
@@ -332,5 +341,6 @@ function startGame() {
 const secretWord = document.querySelector(".secretWord");
 const restartBtn = document.querySelector(".menu-button-wrapper");
 const keyboard = document.querySelector(".keyboard");
-keyboard.addEventListener("click", vrBtnClick);
+keyboard.addEventListener("click", btnClick);
 restartBtn.addEventListener("click", startGame);
+document.addEventListener("keydown", btnClick);

@@ -91,11 +91,14 @@ createLayout();
 
 function createLayout() {
   const bodyWrapper = document.createElement("div");
+  const gallowsWrapper = document.createElement("div");
   const gallows = document.createElement("div");
+  gallowsWrapper.classList.add("gallowsWrapper");
   gallows.classList.add("gallows");
   const gallow = document.createElement("img");
   gallow.setAttribute("src", "../files/gallows.png");
   gallow.setAttribute("alt", "gallow");
+  gallow.classList.add("gallowImg");
   const gallowMan = createGallower();
   gallowMan.classList.add("gallowMan");
   gallows.append(gallowMan);
@@ -105,18 +108,20 @@ function createLayout() {
   secretWord.classList.add("secretWord");
   const question = document.createElement("p");
   question.setAttribute("id", "question");
+  question.classList.add("question");
   const counter = document.createElement("p");
   counter.setAttribute("id", "counter");
   const keyboard = createKeyboard();
   keyboard.classList.add("keyboard");
   bodyWrapper.classList.add("bodyWrapper");
   const popup = createPopup();
+  gallowsWrapper.append(gallows);
   gallows.append(gallow);
   quiz.append(secretWord);
   quiz.append(question);
   quiz.append(counter);
   quiz.append(keyboard);
-  bodyWrapper.append(gallows);
+  bodyWrapper.append(gallowsWrapper);
   bodyWrapper.append(quiz);
   body.append(bodyWrapper);
   body.append(popup);
@@ -224,12 +229,17 @@ function btnClick(e) {
     char = btn?.innerText;
     btn.classList.add("inactive");
   } else if (e.type === "keydown") {
-    char = String(e.key).toUpperCase();
-    const btn = document.getElementById(char);
-    if (btn.classList.contains("inactive")) return false;
-    btn.classList.add("inactive");
+    try {
+      char = String(e.key).toUpperCase();
+      const btn = document.getElementById(char);
+      if (btn.classList.contains("inactive")) return false;
+      btn.classList.add("inactive");
+    } catch (e) {
+      return false;
+    }
   }
   const quizQuestion = getQuizData();
+  const secretWord = document.querySelector(".secretWord");
   let word = secretWord.innerText;
   let counter = document.getElementById("counter");
   if (char && quizQuestion.answer.includes(char)) {
@@ -246,7 +256,7 @@ function btnClick(e) {
     secretWord.innerText = word;
   } else {
     let number = +counter.innerText[19];
-    counterText = counter.innerText
+    let counterText = counter.innerText
       .split(" ")
       .toSpliced(2, 1, number + 1)
       .join(" ");
@@ -258,6 +268,7 @@ function btnClick(e) {
 }
 
 function checkGame() {
+  const secretWord = document.querySelector(".secretWord");
   let word = secretWord.innerText;
   const popup = document.querySelector(".popup");
   const popupContent = document.querySelector(".popup-content");
@@ -286,10 +297,13 @@ function createPopup() {
   popupContent.classList.add("popup-content");
   const popupHeader = document.createElement("p");
   popupHeader.setAttribute("id", "popup_header");
+  popupHeader.classList.add("popupText");
   const popupSecretWord = document.createElement("p");
   popupSecretWord.setAttribute("id", "popup_secret_word");
+  popupSecretWord.classList.add("popupText");
   const popupIncorrCounter = document.createElement("p");
   popupIncorrCounter.setAttribute("id", "popup_incorrect_answers");
+  popupIncorrCounter.classList.add("popupText");
   const restart = document.createElement("button");
   restart.classList.add("menu-button-wrapper");
   restart.innerText = "Try again";
@@ -338,7 +352,6 @@ function startGame() {
   localStorage.setItem("id", quizQuestion.id);
 }
 
-const secretWord = document.querySelector(".secretWord");
 const restartBtn = document.querySelector(".menu-button-wrapper");
 const keyboard = document.querySelector(".keyboard");
 keyboard.addEventListener("click", btnClick);

@@ -246,7 +246,7 @@ function btnClick(e) {
     secretWord.innerText = word;
   } else {
     let number = +counter.innerText[19];
-    counterText = counter.innerText
+    let counterText = counter.innerText
       .split(" ")
       .toSpliced(2, 1, number + 1)
       .join(" ");

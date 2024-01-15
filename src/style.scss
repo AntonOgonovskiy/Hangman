@@ -1,9 +1,14 @@
+body {
+  margin: 0;
+}
 .bodyWrapper {
+  margin: 5px;
   display: flex;
   flex-direction: row;
-  width: 100%;
-  height: 100vh;
-  justify-content: center;
+  flex-wrap: wrap;
+  width: calc(100% - 10px);
+  height: 95vh;
+  justify-content: space-evenly;
   align-items: center;
 }
 .keyboard {
@@ -25,9 +30,18 @@
   }
 }
 
-.gallows {
-  width: 40%;
+.gallowsWrapper {
+  width: 360px;
   position: relative;
+}
+
+.gallows {
+  display: flex;
+  justify-content: center;
+  max-width: 90%;
+  @media screen and (max-width: 768px) {
+    justify-content: flex-start;
+  }
 }
 .unvise {
   opacity: 0;
@@ -42,13 +56,19 @@
   }
 }
 
+.gallowImg {
+  width: 100%;
+}
+
 .gallowMan {
   display: flex;
+  width: max-content;
   flex-direction: column;
   align-items: center;
   position: absolute;
-  top: 200px;
-  left: 235px;
+  top: 150px;
+  right: 10px;
+
   .gallowBody {
     max-width: 10px;
     max-height: 100px;
@@ -62,6 +82,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 50%;
+  @media screen and (max-width: 730px) {
+    max-width: max-content;
+  }
+}
+.question {
+  max-width: 70%;
+  text-align: center;
 }
 
 .keyboard {
@@ -70,7 +98,7 @@
   flex-wrap: wrap;
   align-items: stretch;
   justify-content: center;
-  width: 60%;
+  max-width: 80%;
 }
 
 .popup {
@@ -105,6 +133,12 @@
   opacity: 0;
   transform: perspective(600px) translate(0px, -100%) rotateX(45deg);
   font-size: 25px;
+  @media screen and (max-width: 768px) {
+    width: 70%;
+  }
+}
+.popupText {
+  text-align: center;
 }
 .pop-visibility {
   opacity: 1;
@@ -122,7 +156,7 @@
   align-items: center;
   gap: 8px;
   border-radius: 100px;
-  border: 1px solid var(--border-light, #c1b6ad);
+  border: 1px solid black;
   cursor: pointer;
   transition: 0.2s;
 }

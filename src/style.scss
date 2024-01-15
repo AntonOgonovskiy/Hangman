@@ -159,6 +159,9 @@ body {
   border: 1px solid black;
   cursor: pointer;
   transition: 0.2s;
+  &:hover {
+    box-shadow: 2px 2px 2px gray;
+  }
 }
 .scroll {
   height: 100%;

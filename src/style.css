@@ -177,6 +177,9 @@ body {
   cursor: pointer;
   transition: 0.2s;
 }
+.menu-button-wrapper:hover {
+  box-shadow: 2px 2px 2px gray;
+}
 
 .scroll {
   height: 100%;

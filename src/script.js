@@ -255,14 +255,18 @@ function btnClick(e) {
       .join(" ");
     secretWord.innerText = word;
   } else {
-    let number = +counter.innerText[19];
-    let counterText = counter.innerText
-      .split(" ")
-      .toSpliced(2, 1, number + 1)
-      .join(" ");
-    counter.innerHTML = counterText;
-    let bodyPart = document.getElementById(`body_${number}`);
-    bodyPart.classList.remove("unvise");
+    try {
+      let number = +counter.innerText[19];
+      let counterText = counter.innerText
+        .split(" ")
+        .toSpliced(2, 1, number + 1)
+        .join(" ");
+      counter.innerHTML = counterText;
+      let bodyPart = document.getElementById(`body_${number}`);
+      bodyPart.classList.remove("unvise");
+    } catch {
+      console.log("don't do this!!!");
+    }
   }
   checkGame();
 }

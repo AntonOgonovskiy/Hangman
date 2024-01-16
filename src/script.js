@@ -131,8 +131,11 @@ function createLayout() {
 function createGallower() {
   const gallowMan = document.createElement("div");
   const gallowTop = document.createElement("div");
+  gallowTop.classList.add("gallowManPart");
   const gallowCenter = document.createElement("div");
+  gallowCenter.classList.add("gallowManPart");
   const gallowBottom = document.createElement("div");
+  gallowBottom.classList.add("gallowManPart");
   const gallowHead = document.createElement("img");
   gallowHead.setAttribute("src", "../files/head.png");
   gallowHead.setAttribute("alt", "head");

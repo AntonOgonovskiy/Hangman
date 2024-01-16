@@ -131,8 +131,11 @@ function createLayout() {
 function createGallower() {
   const gallowMan = document.createElement("div");
   const gallowTop = document.createElement("div");
+  gallowTop.classList.add("gallowManPart");
   const gallowCenter = document.createElement("div");
+  gallowCenter.classList.add("gallowManPart");
   const gallowBottom = document.createElement("div");
+  gallowBottom.classList.add("gallowManPart");
   const gallowHead = document.createElement("img");
   gallowHead.setAttribute("src", "../files/head.png");
   gallowHead.setAttribute("alt", "head");
@@ -255,14 +258,18 @@ function btnClick(e) {
       .join(" ");
     secretWord.innerText = word;
   } else {
-    let number = +counter.innerText[19];
-    let counterText = counter.innerText
-      .split(" ")
-      .toSpliced(2, 1, number + 1)
-      .join(" ");
-    counter.innerHTML = counterText;
-    let bodyPart = document.getElementById(`body_${number}`);
-    bodyPart.classList.remove("unvise");
+    try {
+      let number = +counter.innerText[19];
+      let counterText = counter.innerText
+        .split(" ")
+        .toSpliced(2, 1, number + 1)
+        .join(" ");
+      counter.innerHTML = counterText;
+      let bodyPart = document.getElementById(`body_${number}`);
+      bodyPart.classList.remove("unvise");
+    } catch {
+      console.log("don't do this!!!");
+    }
   }
   checkGame();
 }

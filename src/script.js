@@ -225,6 +225,8 @@ function getQuizData() {
 }
 
 function btnClick(e) {
+  const popup = document.querySelector(".popup");
+  if (popup.classList.contains("pop-visibility")) return false;
   let char = "";
   if (e.type === "click") {
     const btn = e.target.closest("p");
